@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-device-admin": ["../src/index"],
+      "expo-device-admin/*": ["../src/*"]
+    }
+  }
+}
