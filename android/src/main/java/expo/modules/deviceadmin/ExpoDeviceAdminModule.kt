@@ -3,6 +3,9 @@ package expo.modules.deviceadmin
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.net.URL
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 
 class ExpoDeviceAdminModule : Module() {
   // Each module class must implement the definition function. The definition consists of components
@@ -13,6 +16,16 @@ class ExpoDeviceAdminModule : Module() {
     // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
     // The module will be accessible from `requireNativeModule('ExpoDeviceAdmin')` in JavaScript.
     Name("ExpoDeviceAdmin")
+
+    fun rebootDevice(context: Context) {
+    try {
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
+        dpm.reboot(componentName)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
 
   }
 }
