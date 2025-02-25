@@ -19,11 +19,35 @@ class ExpoDeviceAdminModule : Module() {
     
     promise.resolve(isOwner) // Returns `true` if app is device owner, `false` otherwise
   } catch (e: Exception) {
-    promise.reject("CHECK_DEVICE_OWNER_ERROR", e)
+    promise.reject("CHECK_DEVICE_OWNER_ERROR", "isDeviceOwner error", e)
   }
 }
 
+    // Example function to reboot device
+    Function("rebootDevice") { promise: Promise ->
+      try {
+        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+        dpm.reboot(componentName)
+        promise.resolve(null)
+      } catch (e: Exception) {
+        promise.reject("REBOOT_ERROR", "Failed to reboot device", e)
+      }
+    }
 
+    // Example function for setting lock task features
+    Function("setLockTaskFeatures") { features: Int, promise: Promise ->
+      try {
+        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+        dpm.setLockTaskFeatures(componentName, features)
+        promise.resolve(null)
+      } catch (e: Exception) {
+        promise.reject("SET_FEATURES_ERROR", "Failed to set lock task features", e)
+      }
+    }
+
+/*
     Function("rebootDevice") { promise: Promise ->
   try {
     val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
@@ -61,8 +85,17 @@ class ExpoDeviceAdminModule : Module() {
         promise.reject("SET_FEATURES_ERROR", e)
       }
     }
-
+*/
     Function("lockEverythingExceptPowerButton") { promise: Promise ->
+       try {
+        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+        dpm.setLockTaskFeatures(componentName, DevicePolicyManager.LOCK_TASK_FEATURE_GLOBAL_ACTIONS)
+        promise.resolve(null)
+      } catch (e: Exception) {
+        promise.reject("SET_FEATURES_ERROR", "Failed to set lock task features", e)
+      }
+       /*
       try {
         val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
         val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
@@ -79,6 +112,7 @@ class ExpoDeviceAdminModule : Module() {
       } catch (e: Exception) {
         promise.reject("SET_FEATURES_ERROR", e)
       }
+      */
     }
 
     Constants {
