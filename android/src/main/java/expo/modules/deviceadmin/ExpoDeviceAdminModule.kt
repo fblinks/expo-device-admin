@@ -11,17 +11,38 @@ class ExpoDeviceAdminModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ExpoDeviceAdmin")
 
+    Function("isDeviceOwner") { promise: Promise ->
+  try {
+    val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+    val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+    val isOwner = dpm.isDeviceOwnerApp(context.packageName)
+    
+    promise.resolve(isOwner) // Returns `true` if app is device owner, `false` otherwise
+  } catch (e: Exception) {
+    promise.reject("CHECK_DEVICE_OWNER_ERROR", e)
+  }
+}
+
+
     Function("rebootDevice") { promise: Promise ->
-      try {
-        val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
-        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
-        dpm.reboot(componentName)
-        promise.resolve(null)
-      } catch (e: Exception) {
-        promise.reject("REBOOT_ERROR", e)
-      }
+  try {
+    val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+    val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+
+    if (!dpm.isDeviceOwnerApp(context.packageName)) {
+      promise.reject("NOT_DEVICE_OWNER", "App must be a device owner to reboot the device.")
+      return@Function
     }
+
+    dpm.reboot(null) // `null` is required, not `componentName`
+    promise.resolve(null)
+  } catch (e: SecurityException) {
+    promise.reject("SECURITY_EXCEPTION", "Reboot failed. Make sure the app is a device owner.")
+  } catch (e: Exception) {
+    promise.reject("REBOOT_ERROR", e)
+  }
+}
+
 
     Function("setLockTaskFeatures") { features: Int, promise: Promise ->
       try {
