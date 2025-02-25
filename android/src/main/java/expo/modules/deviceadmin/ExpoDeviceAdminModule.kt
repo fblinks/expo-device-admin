@@ -26,8 +26,9 @@ class ExpoDeviceAdminModule : Module() {
     // Example function to reboot device
     Function("rebootDevice") { promise: Promise ->
       try {
-        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+        val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
         dpm.reboot(componentName)
         promise.resolve(null)
       } catch (e: Exception) {
@@ -38,8 +39,9 @@ class ExpoDeviceAdminModule : Module() {
     // Example function for setting lock task features
     Function("setLockTaskFeatures") { features: Int, promise: Promise ->
       try {
-        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+        val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
         dpm.setLockTaskFeatures(componentName, features)
         promise.resolve(null)
       } catch (e: Exception) {
@@ -88,8 +90,9 @@ class ExpoDeviceAdminModule : Module() {
 */
     Function("lockEverythingExceptPowerButton") { promise: Promise ->
        try {
-        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+        val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
         dpm.setLockTaskFeatures(componentName, DevicePolicyManager.LOCK_TASK_FEATURE_GLOBAL_ACTIONS)
         promise.resolve(null)
       } catch (e: Exception) {
