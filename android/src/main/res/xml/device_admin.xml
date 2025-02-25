@@ -1,3 +1,8 @@
 <device-admin>
     <!-- Optional: No policies required -->
+    <uses-policies>
+        <!-- Add the policies your app needs -->
+        <force-lock />
+        <wipe-data />
+    </uses-policies>
 </device-admin>
