@@ -1,6 +1,6 @@
 import { NativeModule, requireNativeModule } from "expo";
 
-interface ExpoDeviceAdminModule extends NativeModule {
+declare class ExpoDeviceAdminModule extends NativeModule {
   rebootDevice(): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
   lockEverythingExceptPowerButton(): Promise<void>;
