@@ -1,7 +1,14 @@
 import { NativeModule, requireNativeModule } from "expo";
 
-declare class ExpoDeviceAdminModule extends NativeModule {
+interface ExpoDeviceAdminModule extends NativeModule {
+  rebootDevice(): Promise<void>;
+  setLockTaskFeatures(features: number): Promise<void>;
+  lockEverythingExceptPowerButton(): Promise<void>;
+  isDeviceOwner(): Promise<boolean>; // Ensure this matches the native function
 }
 
-// This call loads the native module object from the JSI.
-export default requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");
+// Load the native module from JSI
+const ExpoDeviceAdmin = requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");
+
+export default ExpoDeviceAdmin;
+
