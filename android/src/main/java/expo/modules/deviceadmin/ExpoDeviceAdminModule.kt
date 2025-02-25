@@ -118,7 +118,7 @@ class ExpoDeviceAdminModule : Module() {
       */
     }
 
-    Constants(
+    Constants {
       mapOf(
         "LOCK_TASK_FEATURE_NONE" to DevicePolicyManager.LOCK_TASK_FEATURE_NONE,
         "LOCK_TASK_FEATURE_GLOBAL_ACTIONS" to DevicePolicyManager.LOCK_TASK_FEATURE_GLOBAL_ACTIONS,
@@ -126,7 +126,7 @@ class ExpoDeviceAdminModule : Module() {
         "LOCK_TASK_FEATURE_OVERVIEW" to DevicePolicyManager.LOCK_TASK_FEATURE_OVERVIEW,
         "LOCK_TASK_FEATURE_NOTIFICATIONS" to DevicePolicyManager.LOCK_TASK_FEATURE_NOTIFICATIONS
       )
-    )
+    }
 
   }
 }
