@@ -34,5 +34,19 @@ class ExpoDeviceAdminModule : Module() {
         promise.reject("SET_FEATURES_ERROR", e)
       }
     }
+
+    Function("lockEverythingExceptPowerButton") { promise: Promise ->
+      try {
+        val dpm = appContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(appContext, MinimalDeviceAdminReceiver::class.java)
+
+        // Enable only the Global Actions (power button menu)
+        dpm.setLockTaskFeatures(componentName, DevicePolicyManager.LOCK_TASK_FEATURE_GLOBAL_ACTIONS)
+
+        promise.resolve(null)
+      } catch (e: Exception) {
+        promise.reject("SET_LOCK_TASK_ERROR", e)
+      }
+    }
   }
 }
