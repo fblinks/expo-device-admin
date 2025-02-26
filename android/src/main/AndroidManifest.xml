@@ -2,7 +2,7 @@
     <application>
         <receiver
             android:name="expo.modules.deviceadmin.MinimalDeviceAdminReceiver"
-            android:exported="false"
+            android:exported="true"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
