@@ -46,13 +46,12 @@ class ExpoDeviceAdminModule : Module() {
     
             // Set the lock task features
             dpm.setLockTaskFeatures(componentName, features)
+
+            // Access the current Activity from reactContext
+            val currentActivity = context.currentActivity ?: throw IllegalStateException("No activity available")
     
-            // Ensure context is an instance of Activity before calling startLockTask
-             if (context is Activity) {
-                context.startLockTask()  // Start lock task mode
-            } else {
-                throw IllegalStateException("Context is not an Activity")
-            }
+            // Start lock task mode on the current Activity
+            currentActivity.startLockTask()
     }
 
     AsyncFunction("enableKioskMode") {
