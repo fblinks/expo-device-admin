@@ -5,6 +5,8 @@ import expo.modules.kotlin.modules.ModuleDefinition
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.app.Activity
+
 
 class ExpoDeviceAdminModule : Module() {
   override fun definition() = ModuleDefinition {
@@ -39,7 +41,13 @@ class ExpoDeviceAdminModule : Module() {
       }
 
       dpm.setLockTaskFeatures(componentName, features)
-      (context as Activity).startLockTask()
+      // Ensure context is an instance of Activity before calling startLockTask
+      if (context is Activity) {
+          context.startLockTask()  // Start lock task mode
+      } else {
+          // Handle the case where context is not an Activity
+          throw IllegalStateException("Context is not an Activity")
+      }
     }
 
     Constants(
