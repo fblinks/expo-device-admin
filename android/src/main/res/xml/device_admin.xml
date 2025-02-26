@@ -4,6 +4,5 @@
         <!-- Add the policies your app needs -->
         <force-lock />
         <wipe-data />
-        <disable-keyguard-features android:disabledKeyguardFeatures="all" />
     </uses-policies>
 </device-admin>
