@@ -24,7 +24,9 @@ class ExpoDeviceAdminModule : Module() {
         throw SecurityException("App must be a device owner to reboot the device.")
       }
 
-      dpm.reboot(null)
+      val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
+
+      dpm.reboot(componentName)
     }
 
     AsyncFunction("setLockTaskFeatures") { features: Int ->
