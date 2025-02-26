@@ -32,22 +32,31 @@ class ExpoDeviceAdminModule : Module() {
     }
 
     AsyncFunction("setLockTaskFeatures") { features: Int ->
-      val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
-      val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-      val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
-
-      if (!dpm.isDeviceOwnerApp(context.packageName)) {
-        throw Exception("App is not the device owner.")
-      }
-
-      dpm.setLockTaskFeatures(componentName, features)
-      // Ensure context is an instance of Activity before calling startLockTask
-      if (context is Activity) {
-          context.startLockTask()  // Start lock task mode
-      } else {
-          // Handle the case where context is not an Activity
-          throw IllegalStateException("Context is not an Activity")
-      }
+        try {
+            val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+            val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+            val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
+    
+            // Check if app is the device owner
+            if (!dpm.isDeviceOwnerApp(context.packageName)) {
+                throw IllegalStateException("App is not the device owner.")
+            }
+    
+            // Set the lock task features
+            dpm.setLockTaskFeatures(componentName, features)
+    
+            // Ensure context is an instance of Activity before calling startLockTask
+            if (context is Activity) {
+                context.startLockTask()  // Start lock task mode
+            } else {
+                throw IllegalStateException("Context is not an Activity")
+            }
+        } catch (e: Exception) {
+            // Handle errors by rejecting the promise or logging them
+            log.error("Error setting lock task features: ${e.message}")
+            // Handle rejection if it's a promise-based function
+            promise.reject("SET_LOCK_TASK_FEATURES_ERROR", "Error setting lock task features", e)
+        }
     }
 
     Constants(
