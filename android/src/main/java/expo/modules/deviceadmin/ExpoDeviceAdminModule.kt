@@ -10,14 +10,16 @@ class ExpoDeviceAdminModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ExpoDeviceAdmin")
 
+    private val context
+    get() = requireNotNull(appContext.reactContext)
+
+
     AsyncFunction("isDeviceOwner") {
-      val context = appContext
       val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
       dpm.isDeviceOwnerApp(context.packageName)
     }
 
     AsyncFunction("rebootDevice") {
-      val context = appContext
       val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
 
       if (!dpm.isDeviceOwnerApp(context.packageName)) {
@@ -28,7 +30,6 @@ class ExpoDeviceAdminModule : Module() {
     }
 
     AsyncFunction("setLockTaskFeatures") { features: Int ->
-      val context = appContext
       val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
       val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
 
