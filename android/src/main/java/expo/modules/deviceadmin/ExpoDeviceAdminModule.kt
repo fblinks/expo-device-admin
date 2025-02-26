@@ -32,7 +32,7 @@ class ExpoDeviceAdminModule : Module() {
     }
 
     AsyncFunction("setLockTaskFeatures") { features: Int ->
-        try {
+        //try {
             val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
             val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
             val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
@@ -48,15 +48,15 @@ class ExpoDeviceAdminModule : Module() {
             // Ensure context is an instance of Activity before calling startLockTask
             if (context is Activity) {
                 context.startLockTask()  // Start lock task mode
-            } else {
-                throw IllegalStateException("Context is not an Activity")
-            }
-        } catch (e: Exception) {
+            } //else {
+                //throw IllegalStateException("Context is not an Activity")
+            //}
+        //} catch (e: Exception) {
             // Handle errors by rejecting the promise or logging them
-            log.error("Error setting lock task features: ${e.message}")
+            //log.error("Error setting lock task features: ${e.message}")
             // Handle rejection if it's a promise-based function
-            promise.reject("SET_LOCK_TASK_FEATURES_ERROR", "Error setting lock task features", e)
-        }
+            //promise.reject("SET_LOCK_TASK_FEATURES_ERROR", "Error setting lock task features", e)
+        //}
     }
 
     Constants(
