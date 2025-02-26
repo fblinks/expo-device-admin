@@ -39,6 +39,7 @@ class ExpoDeviceAdminModule : Module() {
       }
 
       dpm.setLockTaskFeatures(componentName, features)
+      (context as Activity).startLockTask()
     }
 
     Constants(
