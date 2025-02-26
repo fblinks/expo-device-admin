@@ -51,7 +51,6 @@ class ExpoDeviceAdminModule : Module() {
              if (context is Activity) {
                 context.startLockTask()  // Start lock task mode
             } else {
-                Log.e("ExpoDeviceAdmin", "Context is not an Activity")
                 throw IllegalStateException("Context is not an Activity")
             }
     }
