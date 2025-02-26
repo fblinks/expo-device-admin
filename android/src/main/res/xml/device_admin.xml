@@ -1,8 +1,9 @@
-<device-admin>
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Optional: No policies required -->
     <uses-policies>
         <!-- Add the policies your app needs -->
         <force-lock />
         <wipe-data />
+        <disable-keyguard-features android:disabledKeyguardFeatures="all" />
     </uses-policies>
 </device-admin>
