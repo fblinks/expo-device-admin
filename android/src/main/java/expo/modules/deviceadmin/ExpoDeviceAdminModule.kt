@@ -6,6 +6,10 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.app.Activity
+import android.os.Build
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 
 
 class ExpoDeviceAdminModule : Module() {
@@ -32,7 +36,6 @@ class ExpoDeviceAdminModule : Module() {
     }
 
     AsyncFunction("setLockTaskFeatures") { features: Int ->
-        //try {
             val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
             val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
             val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
@@ -46,17 +49,44 @@ class ExpoDeviceAdminModule : Module() {
             dpm.setLockTaskFeatures(componentName, features)
     
             // Ensure context is an instance of Activity before calling startLockTask
-            if (context is Activity) {
+             if (context is Activity) {
                 context.startLockTask()  // Start lock task mode
-            } //else {
-                //throw IllegalStateException("Context is not an Activity")
-            //}
-        //} catch (e: Exception) {
-            // Handle errors by rejecting the promise or logging them
-            //log.error("Error setting lock task features: ${e.message}")
-            // Handle rejection if it's a promise-based function
-            //promise.reject("SET_LOCK_TASK_FEATURES_ERROR", "Error setting lock task features", e)
-        //}
+            } else {
+                Log.e("ExpoDeviceAdmin", "Context is not an Activity")
+                throw IllegalStateException("Context is not an Activity")
+            }
+    }
+
+    AsyncFunction("enableKioskMode") {
+        val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
+    
+        if (context is Activity) {
+            context.runOnUiThread {
+                val window = context.window
+                val decorView = window.decorView
+    
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    // Android 11+ (API 30+)
+                    val controller = window.insetsController
+                    controller?.let {
+                        it.hide(WindowInsets.Type.systemBars()) // Hide status and navigation bars
+                        it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_DEFAULT // Prevents bars from appearing on swipe
+                    }
+                } else {
+                    // Android 10 and below (API 29-)
+                    decorView.systemUiVisibility = (
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    )
+                }
+            }
+        } else {
+            throw IllegalStateException("Context is not an Activity")
+        }
     }
 
     Constants(
