@@ -34,25 +34,34 @@ class ExpoDeviceAdminModule : Module() {
       dpm.reboot(componentName)
     }
 
-    AsyncFunction("setLockTaskFeatures") { features: Int ->
-            val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
-            val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-            val componentName = ComponentName(context.packageName, MinimalDeviceAdminReceiver::class.java.name)
-    
-            // Check if app is the device owner
-            if (!dpm.isDeviceOwnerApp(context.packageName)) {
+    override fun definition() = ModuleDefinition {
+        Name("ExpoDeviceAdmin")
+
+        // Set lock task features and enable kiosk mode
+        AsyncFunction("setLockTaskFeatures") { features: Int ->
+            val activity = appContext.activityProvider?.currentActivity
+                ?: throw IllegalStateException("Current activity is null.")
+
+            val dpm = activity.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+            val componentName = ComponentName(activity.packageName, MinimalDeviceAdminReceiver::class.java.name)
+
+            if (!dpm.isDeviceOwnerApp(activity.packageName)) {
                 throw IllegalStateException("App is not the device owner.")
             }
-    
-            // Set the lock task features
+
             dpm.setLockTaskFeatures(componentName, features)
-
-            val activity = appContext.activityProvider?.currentActivity 
-            ?: throw IllegalStateException("Current activity is null.")
-
             activity.startLockTask()
-    }
+            enableFullscreenKioskMode(activity) // Ensure full kiosk mode is applied
+        }
 
+        // Enable fullscreen mode and hide navigation bar
+        AsyncFunction("enableKioskMode") {
+            val activity = appContext.activityProvider?.currentActivity
+                ?: throw IllegalStateException("Current activity is null.")
+
+            enableFullscreenKioskMode(activity)
+        }
+        /*
     AsyncFunction("enableKioskMode") {
         val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
     
@@ -84,6 +93,7 @@ class ExpoDeviceAdminModule : Module() {
             throw IllegalStateException("Context is not an Activity")
         }
     }
+    */
 
     Constants(
       "LOCK_TASK_FEATURE_NONE" to DevicePolicyManager.LOCK_TASK_FEATURE_NONE,
@@ -93,4 +103,27 @@ class ExpoDeviceAdminModule : Module() {
       "LOCK_TASK_FEATURE_NOTIFICATIONS" to DevicePolicyManager.LOCK_TASK_FEATURE_NOTIFICATIONS
     )
   }
+    private fun enableFullscreenKioskMode(activity: Activity) {
+        activity.runOnUiThread {
+            val window = activity.window
+            val decorView = window.decorView
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val controller = window.insetsController
+                controller?.let {
+                    it.hide(WindowInsets.Type.systemBars()) // Hide status and navigation bars
+                    it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            } else {
+                decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                )
+            }
+        }
+    }
 }
