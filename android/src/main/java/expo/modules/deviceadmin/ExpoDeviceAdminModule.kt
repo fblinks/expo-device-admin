@@ -34,9 +34,6 @@ class ExpoDeviceAdminModule : Module() {
       dpm.reboot(componentName)
     }
 
-    override fun definition() = ModuleDefinition {
-        Name("ExpoDeviceAdmin")
-
         // Set lock task features and enable kiosk mode
         AsyncFunction("setLockTaskFeatures") { features: Int ->
             val activity = appContext.activityProvider?.currentActivity
