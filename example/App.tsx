@@ -1,5 +1,5 @@
 import { useEvent } from 'expo';
-import ExpoDeviceAdmin, { ExpoDeviceAdminView } from 'expo-device-admin';
+import ExpoDeviceAdmin from 'expo-device-admin';
 import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 export default function App() {

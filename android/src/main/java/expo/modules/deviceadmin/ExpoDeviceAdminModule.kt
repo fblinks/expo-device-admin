@@ -12,19 +12,27 @@ import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
 class ExpoDeviceAdminModule : Module() {
+
+    private val context: Context
+    get() = requireNotNull(appContext.reactContext)
+
+  private val currentActivity: android.app.Activity
+    get() = requireNotNull(appContext.currentActivity)
+
+  private val activityManager: ActivityManager
+    get() = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+    private val dpm: DevicePolicyManager
+    get() = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+    
   override fun definition() = ModuleDefinition {
     Name("ExpoDeviceAdmin")
 
     AsyncFunction("isDeviceOwner") {
-      val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
-      val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
       dpm.isDeviceOwnerApp(context.packageName)
     }
 
     AsyncFunction("rebootDevice") {
-      val context = appContext.reactContext ?: throw IllegalStateException("React Context is null")
-      val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-
       if (!dpm.isDeviceOwnerApp(context.packageName)) {
         throw SecurityException("App must be a device owner to reboot the device.")
       }
@@ -33,6 +41,13 @@ class ExpoDeviceAdminModule : Module() {
 
       dpm.reboot(componentName)
     }
+
+    AsyncFunction("lockTaskMode") {
+            val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
+            if (dpm.isDeviceOwnerApp(appContext.packageName)) {
+                dpm.setLockTaskPackages(componentName, arrayOf(appContext.packageName))
+            }
+        }
 
         // Set lock task features and enable kiosk mode
         AsyncFunction("setLockTaskFeatures") { features: Int ->
