@@ -4,7 +4,10 @@ declare class ExpoDeviceAdminModule extends NativeModule {
   rebootDevice(): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
   enableKioskMode(): Promise<void>;
-  isDeviceOwner(): Promise<boolean>; // Matches the native function return type
+  isDeviceOwner(): Promise<boolean>;
+  startKioskMode(): void;
+  exitKioskMode(): void;
+  checkIfKioskEnabled(): boolean;
 }
 
 const ExpoDeviceAdmin = requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");

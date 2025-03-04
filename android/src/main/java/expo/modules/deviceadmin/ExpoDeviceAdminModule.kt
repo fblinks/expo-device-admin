@@ -25,12 +25,40 @@ class ExpoDeviceAdminModule : Module() {
 
     private val dpm: DevicePolicyManager
     get() = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+
+    private val isLockTaskModeRunning: Boolean
+    @SuppressLint("ObsoleteSdkInt")
+    get() {
+      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        activityManager.lockTaskModeState ==
+                ActivityManager.LOCK_TASK_MODE_LOCKED
+                || activityManager.lockTaskModeState ==
+                ActivityManager.LOCK_TASK_MODE_PINNED
+      } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        // Deprecated in API level 23.
+        activityManager.isInLockTaskMode
+      } else {
+        false
+      }
+    }
     
   override fun definition() = ModuleDefinition {
     Name("ExpoDeviceAdmin")
 
     AsyncFunction("isDeviceOwner") {
       dpm.isDeviceOwnerApp(context.packageName)
+    }
+
+    Function("exitKioskMode") {
+        currentActivity.stopLockTask()
+    }
+
+    Function("startKioskMode") {
+        currentActivity.startLockTask()
+    }
+
+    Function("checkIfKioskEnabled") {
+        return@Function isLockTaskModeRunning
     }
 
     AsyncFunction("rebootDevice") {
