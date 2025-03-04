@@ -1,6 +1,7 @@
 package expo.modules.deviceadmin
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
@@ -44,8 +45,8 @@ class ExpoDeviceAdminModule : Module() {
 
     AsyncFunction("lockTaskMode") {
             val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
-            if (dpm.isDeviceOwnerApp(appContext.packageName)) {
-                dpm.setLockTaskPackages(componentName, arrayOf(appContext.packageName))
+            if (dpm.isDeviceOwnerApp(context.packageName)) {
+                dpm.setLockTaskPackages(componentName, arrayOf(context.packageName))
             }
         }
 
