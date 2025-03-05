@@ -1,13 +1,14 @@
 import { NativeModule, requireNativeModule } from "expo-modules-core";
 
 declare class ExpoDeviceAdminModule extends NativeModule {
-  rebootDevice(): Promise<void>;
-  setLockTaskFeatures(features: number): Promise<void>;
-  enableKioskMode(): Promise<void>;
   isDeviceOwner(): Promise<boolean>;
   startKioskMode(): void;
-  exitKioskMode(): void;
+  stopKioskMode(): void;
   checkIfKioskEnabled(): boolean;
+  rebootDevice(): Promise<void>;
+  addToLockTaskMode(): Promise<void>;
+  setLockTaskFeatures(features: number): Promise<void>;
+  enableImmersiveMode(): void;  
 }
 
 const ExpoDeviceAdmin = requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");
