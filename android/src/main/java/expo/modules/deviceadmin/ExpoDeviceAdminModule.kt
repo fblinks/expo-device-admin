@@ -77,7 +77,7 @@ class ExpoDeviceAdminModule : Module() {
         AsyncFunction("addToLockTaskMode") {
             // val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
             if (dpm.isDeviceOwnerApp(context.packageName)) {
-                dpm.setLockTaskPackages(componentName, arrayOf(context.packageName))
+                dpm.setLockTaskPackages(componentName, arrayOf(context.packageName, "com.google.android.captiveportallogin"))
             }
         }
 
