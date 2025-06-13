@@ -8,7 +8,8 @@ declare class ExpoDeviceAdminModule extends NativeModule {
   rebootDevice(): Promise<void>;
   addToLockTaskMode(): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
-  enableImmersiveMode(): void;  
+  enableImmersiveMode(): void;
+  disableImmersiveMode(): void;
 }
 
 const ExpoDeviceAdmin = requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");
