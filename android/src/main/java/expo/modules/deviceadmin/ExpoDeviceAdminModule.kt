@@ -130,6 +130,13 @@ class ExpoDeviceAdminModule : Module() {
             }
         }
 
+        AsyncFunction("disableImmersiveMode") {
+           currentActivity.runOnUiThread {
+              val decorView = currentActivity.window.decorView
+              decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+           }
+        }
+
         Constants(
                 "LOCK_TASK_FEATURE_NONE" to DevicePolicyManager.LOCK_TASK_FEATURE_NONE,
                 "LOCK_TASK_FEATURE_GLOBAL_ACTIONS" to
