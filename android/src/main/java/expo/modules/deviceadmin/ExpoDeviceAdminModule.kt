@@ -83,7 +83,7 @@ class ExpoDeviceAdminModule : Module() {
          * https://developer.android.com/reference/android/app/admin/DevicePolicyManager#setLockTaskFeatures(android.content.ComponentName,%20int)
          */
         AsyncFunction("setLockTaskFeatures") { features: Int ->
-            if (!dpm.isDeviceOwnerApp(currentActivity.packageName)) {
+            if (!dpm.isDeviceOwnerApp(context.packageName)) {
                 throw IllegalStateException("App is not the device owner.")
             }
 
