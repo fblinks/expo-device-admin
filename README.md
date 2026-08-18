@@ -39,7 +39,7 @@ await ExpoDeviceAdmin.setLockTaskFeatures(
 await ExpoDeviceAdmin.rebootDevice();
 
 // Fullscreen / immersive mode
-ExpoDeviceAdmin.enableImmersiveMode();
+await ExpoDeviceAdmin.enableImmersiveMode();
 ```
 
 See `example/App.tsx` for a runnable reference of every method below.
@@ -55,7 +55,7 @@ See `example/App.tsx` for a runnable reference of every method below.
 | `addToLockTaskMode(): Promise<void>` | Allow-lists this app's package for lock task mode. Requires device owner. |
 | `setLockTaskFeatures(features: number): Promise<void>` | Sets which system UI features (see constants below) are available while locked. Requires device owner. |
 | `rebootDevice(): Promise<void>` | Reboots the device immediately. Requires device owner. |
-| `enableImmersiveMode(): void` | Hides the system status/navigation bars. |
+| `enableImmersiveMode(): Promise<void>` | Hides the system status/navigation bars. |
 
 ### Constants
 
