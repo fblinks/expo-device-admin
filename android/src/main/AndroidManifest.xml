@@ -1,6 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <application>
+        <!--
+          exported="false" is intentional, not an oversight: this receiver is only ever
+          activated via `adb shell dpm set-device-owner`, which delivers
+          ACTION_DEVICE_ADMIN_ENABLED as a system-sent broadcast (from system_server).
+          Per Android's receiver-element docs, exported="false" still allows broadcasts
+          "sent by the system" through — it only blocks third-party apps, which is
+          already redundant with the BIND_DEVICE_ADMIN permission below (a system-only
+          permission no app can hold). Only switch this to "true" if QR/NFC/zero-touch
+          enterprise provisioning (driven by the separate ManagedProvisioning app) is
+          added later.
+        -->
         <receiver
             android:name="expo.modules.deviceadmin.MinimalDeviceAdminReceiver"
             android:exported="false"
