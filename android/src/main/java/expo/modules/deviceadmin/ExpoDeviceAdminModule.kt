@@ -71,9 +71,11 @@ class ExpoDeviceAdminModule : Module() {
 
         /** Adds current package to lock task */
         AsyncFunction("addToLockTaskMode") {
-            if (dpm.isDeviceOwnerApp(context.packageName)) {
-                dpm.setLockTaskPackages(componentName, arrayOf(context.packageName))
+            if (!dpm.isDeviceOwnerApp(context.packageName)) {
+                throw IllegalStateException("App is not the device owner.")
             }
+
+            dpm.setLockTaskPackages(componentName, arrayOf(context.packageName))
         }
 
         /**
