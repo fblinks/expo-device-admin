@@ -1,7 +1,6 @@
 package expo.modules.deviceadmin
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
@@ -67,15 +66,11 @@ class ExpoDeviceAdminModule : Module() {
                 throw SecurityException("App must be a device owner to reboot the device.")
             }
 
-            // val componentName =
-            //         ComponentName(context, MinimalDeviceAdminReceiver::class.java)
-
             dpm.reboot(componentName)
         }
 
         /** Adds current package to lock task */
         AsyncFunction("addToLockTaskMode") {
-            // val componentName = ComponentName(context, MinimalDeviceAdminReceiver::class.java)
             if (dpm.isDeviceOwnerApp(context.packageName)) {
                 dpm.setLockTaskPackages(componentName, arrayOf(context.packageName))
             }
@@ -86,14 +81,6 @@ class ExpoDeviceAdminModule : Module() {
          * https://developer.android.com/reference/android/app/admin/DevicePolicyManager#setLockTaskFeatures(android.content.ComponentName,%20int)
          */
         AsyncFunction("setLockTaskFeatures") { features: Int ->
-
-            // val dpm =
-            //         activity.getSystemService(Context.DEVICE_POLICY_SERVICE) as
-            // DevicePolicyManager
-            // val componentName =
-            //         ComponentName(activity.packageName,
-            // MinimalDeviceAdminReceiver::class.java.name)
-
             if (!dpm.isDeviceOwnerApp(currentActivity.packageName)) {
                 throw IllegalStateException("App is not the device owner.")
             }
@@ -103,11 +90,6 @@ class ExpoDeviceAdminModule : Module() {
 
         /** Enables fullscreen mode and hides system bars */
         AsyncFunction("enableImmersiveMode") {
-            // val activity =
-            //         appContext.activityProvider?.currentActivity
-            //                 ?: throw IllegalStateException("Current activity is null.")
-
-            // enableImmersiveMode(currentActivity)
             currentActivity.runOnUiThread {
                 val window = currentActivity.window
                 val decorView = window.decorView
@@ -140,26 +122,4 @@ class ExpoDeviceAdminModule : Module() {
                         DevicePolicyManager.LOCK_TASK_FEATURE_NOTIFICATIONS
         )
     }
-    // private fun enableImmersiveMode(activity: Activity) {
-    //     activity.runOnUiThread {
-    //         val window = activity.window
-    //         val decorView = window.decorView
-
-    //         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) { // Android 11+ (API 30+)
-    //             val controller = window.insetsController
-    //             controller?.let {
-    //                 it.hide(WindowInsets.Type.systemBars()) // Hide status and navigation bars
-    //                 it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_DEFAULT
-    //             }
-    //         } else {// Android 10 and below (API 29-)
-    //             decorView.systemUiVisibility =
-    //                     (View.SYSTEM_UI_FLAG_IMMERSIVE or
-    //                             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-    //                             View.SYSTEM_UI_FLAG_FULLSCREEN or
-    //                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-    //                             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-    //                             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-    //         }
-    //     }
-    // }
 }

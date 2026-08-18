@@ -1,36 +1,59 @@
-import { useEvent } from 'expo';
 import ExpoDeviceAdmin from 'expo-device-admin';
+import { useState } from 'react';
 import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 export default function App() {
-  const onChangePayload = useEvent(ExpoDeviceAdmin, 'onChange');
+  const [isDeviceOwner, setIsDeviceOwner] = useState<boolean | null>(null);
+  const [isKioskEnabled, setIsKioskEnabled] = useState<boolean | null>(null);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{ExpoDeviceAdmin.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{ExpoDeviceAdmin.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
+        <Group name="Device owner">
           <Button
-            title="Set value"
+            title="Check if device owner"
             onPress={async () => {
-              await ExpoDeviceAdmin.setValueAsync('Hello from JS!');
+              setIsDeviceOwner(await ExpoDeviceAdmin.isDeviceOwner());
+            }}
+          />
+          <Text>{isDeviceOwner === null ? 'Unknown' : String(isDeviceOwner)}</Text>
+        </Group>
+        <Group name="Kiosk mode">
+          <Button title="Start kiosk mode" onPress={() => ExpoDeviceAdmin.startKioskMode()} />
+          <Button title="Stop kiosk mode" onPress={() => ExpoDeviceAdmin.stopKioskMode()} />
+          <Button
+            title="Check if kiosk enabled"
+            onPress={() => setIsKioskEnabled(ExpoDeviceAdmin.checkIfKioskEnabled())}
+          />
+          <Text>{isKioskEnabled === null ? 'Unknown' : String(isKioskEnabled)}</Text>
+        </Group>
+        <Group name="Lock task">
+          <Button
+            title="Add current package to lock task"
+            onPress={async () => {
+              await ExpoDeviceAdmin.addToLockTaskMode();
+            }}
+          />
+          <Button
+            title="Set lock task features (home + overview)"
+            onPress={async () => {
+              await ExpoDeviceAdmin.setLockTaskFeatures(
+                ExpoDeviceAdmin.LOCK_TASK_FEATURE_HOME | ExpoDeviceAdmin.LOCK_TASK_FEATURE_OVERVIEW
+              );
             }}
           />
         </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <ExpoDeviceAdminView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
+        <Group name="Device control">
+          <Button
+            title="Reboot device"
+            onPress={async () => {
+              await ExpoDeviceAdmin.rebootDevice();
+            }}
+          />
+          <Button
+            title="Enable immersive mode"
+            onPress={() => ExpoDeviceAdmin.enableImmersiveMode()}
           />
         </Group>
       </ScrollView>
@@ -65,9 +88,5 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: '#eee',
-  },
-  view: {
-    flex: 1,
-    height: 200,
   },
 };
