@@ -9,8 +9,15 @@ declare class ExpoDeviceAdminModule extends NativeModule {
   addToLockTaskMode(): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
   enableImmersiveMode(): Promise<void>;
+
+  LOCK_TASK_FEATURE_NONE: number;
+  LOCK_TASK_FEATURE_GLOBAL_ACTIONS: number;
+  LOCK_TASK_FEATURE_HOME: number;
+  LOCK_TASK_FEATURE_OVERVIEW: number;
+  LOCK_TASK_FEATURE_NOTIFICATIONS: number;
 }
 
-const ExpoDeviceAdmin = requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");
+const ExpoDeviceAdmin =
+  requireNativeModule<ExpoDeviceAdminModule>("ExpoDeviceAdmin");
 
 export default ExpoDeviceAdmin;

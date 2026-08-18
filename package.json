@@ -30,10 +30,11 @@
   "homepage": "https://github.com/fblinks/expo-device-admin#readme",
   "dependencies": {},
   "devDependencies": {
-    "@types/react": "~18.3.12",
-    "expo-module-scripts": "^4.0.2",
-    "expo": "~52.0.0",
-    "react-native": "0.76.0"
+    "@types/react": "~19.2.18",
+    "expo-module-scripts": "^56.0.3",
+    "expo": "~57.0.14",
+    "expo-modules-core": "~57.0.11",
+    "react-native": "0.87.0"
   },
   "peerDependencies": {
     "expo": "*",
