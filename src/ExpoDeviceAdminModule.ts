@@ -9,6 +9,7 @@ declare class ExpoDeviceAdminModule extends NativeModule {
   addToLockTaskMode(): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
   enableImmersiveMode(): Promise<void>;
+  disableImmersiveMode(): Promise<void>;
 
   LOCK_TASK_FEATURE_NONE: number;
   LOCK_TASK_FEATURE_GLOBAL_ACTIONS: number;

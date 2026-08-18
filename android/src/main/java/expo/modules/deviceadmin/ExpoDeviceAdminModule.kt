@@ -75,7 +75,7 @@ class ExpoDeviceAdminModule : Module() {
                 throw IllegalStateException("App is not the device owner.")
             }
 
-            dpm.setLockTaskPackages(componentName, arrayOf(context.packageName))
+            dpm.setLockTaskPackages(componentName, arrayOf(context.packageName, "com.google.android.captiveportallogin"))
         }
 
         /**
@@ -112,6 +112,13 @@ class ExpoDeviceAdminModule : Module() {
                                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
                 }
             }
+        }
+
+        AsyncFunction("disableImmersiveMode") {
+           currentActivity.runOnUiThread {
+              val decorView = currentActivity.window.decorView
+              decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+           }
         }
 
         Constants(

@@ -40,6 +40,7 @@ await ExpoDeviceAdmin.rebootDevice();
 
 // Fullscreen / immersive mode
 await ExpoDeviceAdmin.enableImmersiveMode();
+await ExpoDeviceAdmin.disableImmersiveMode();
 ```
 
 See `example/App.tsx` for a runnable reference of every method below.
@@ -56,6 +57,7 @@ See `example/App.tsx` for a runnable reference of every method below.
 | `setLockTaskFeatures(features: number): Promise<void>` | Sets which system UI features (see constants below) are available while locked. Requires device owner. |
 | `rebootDevice(): Promise<void>` | Reboots the device immediately. Requires device owner. |
 | `enableImmersiveMode(): Promise<void>` | Hides the system status/navigation bars. |
+| `disableImmersiveMode(): Promise<void>` | Restores the system status/navigation bars. |
 
 ### Constants
 

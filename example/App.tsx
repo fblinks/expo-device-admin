@@ -53,7 +53,15 @@ export default function App() {
           />
           <Button
             title="Enable immersive mode"
-            onPress={() => ExpoDeviceAdmin.enableImmersiveMode()}
+            onPress={async () => {
+              await ExpoDeviceAdmin.enableImmersiveMode();
+            }}
+          />
+          <Button
+            title="Disable immersive mode"
+            onPress={async () => {
+              await ExpoDeviceAdmin.disableImmersiveMode();
+            }}
           />
         </Group>
       </ScrollView>
