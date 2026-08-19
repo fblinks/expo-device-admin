@@ -40,6 +40,8 @@ Pinned to Expo SDK 57 (`expo` ~57, `react-native` 0.87, `react` 19, `@types/reac
 
 `android/build.gradle`'s fallback SDK versions (`compileSdkVersion`/`targetSdkVersion` 36, `minSdkVersion` 24) mirror `expo-modules-core`'s own `useDefaultAndroidSdkVersions()` defaults (in `node_modules/expo-modules-core/android/ExpoModulesCorePlugin.gradle`) — when bumping `expo-modules-core`, check that file for new defaults and bump these fallbacks to match.
 
+`"prepare": "expo-module build"` in `package.json` is deliberately **not** `"expo-module prepare"` — don't "fix" this to look consistent with the other scripts. This package is consumed via a git URL dependency (not the npm registry), and `build/` is gitignored/never committed, so `prepare` (the only lifecycle hook npm runs automatically for a git-sourced dependency) must actually produce `build/index.js` itself. `expo-module-scripts`'s own bundled `prepare` binary can't be relied on for this: older versions ship it as a bash script (`set -eo pipefail`) that crashes on Windows when Node's loader tries to parse it as JS instead of executing it through a shell, and the current version (`^56`) turned it into a pure no-op that would silently skip building entirely, shipping a broken module.
+
 ## Versioning
 
 Keep `package.json`'s `"version"` and `android/build.gradle`'s `version` / `versionName` in sync — they are not read from a single source of truth.
