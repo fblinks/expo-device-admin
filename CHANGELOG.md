@@ -13,6 +13,7 @@
 - Fix `addToLockTaskMode()` silently succeeding when the app is not the device owner; it now rejects with `IllegalStateException("App is not the device owner.")`, matching `rebootDevice()` and `setLockTaskFeatures()`.
 - Fix `setLockTaskFeatures()` crashing with a generic error when called before any Activity is attached, instead of rejecting with `IllegalStateException("App is not the device owner.")`; the device-owner check now uses `context.packageName` instead of `currentActivity.packageName`.
 - Fix `enableImmersiveMode()`'s TypeScript type, which was declared `void` but always returns a Promise; it's now typed `Promise<void>` so callers can await/catch it.
+- Fix `npm install` of this package as a git dependency failing entirely during `prepare`: `typescript` was never declared as a dependency, so `npx tsc` could resolve an unrelated abandoned `tsc` package from the registry instead of the TypeScript compiler when `typescript` wasn't incidentally hoisted from a sub-dependency. Added `typescript` as an explicit devDependency.
 
 ### 💡 Others
 
