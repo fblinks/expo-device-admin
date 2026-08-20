@@ -4,9 +4,21 @@
 
 ### 🛠 Breaking changes
 
+### 🎉 New features
+
+### 🐛 Bug fixes
+
+### 💡 Others
+
+## 0.3.0 (2026-08-20)
+
+### 🛠 Breaking changes
+
 - Bump default Android SDK versions to match `expo-modules-core`'s new defaults: `compileSdkVersion`/`targetSdkVersion` 34 → 36, `minSdkVersion` 21 → 24. Apps that don't override these via their own `rootProject.ext` now need Android 7.0+ (API 24) as their minimum supported OS.
 
 ### 🎉 New features
+
+- Add `disableImmersiveMode()`, which restores the system status/navigation bars hidden by `enableImmersiveMode()`.
 
 ### 🐛 Bug fixes
 
@@ -17,6 +29,7 @@
 
 ### 💡 Others
 
+- `addToLockTaskMode()` now also allow-lists `com.google.android.captiveportallogin`, so captive portal sign-in pages can display while locked in kiosk mode.
 - Update `expo`, `react-native`, `react`, `@types/react`, and `expo-module-scripts` to their latest versions (Expo SDK 57).
 - Add `expo-modules-core` as an explicit devDependency; it's no longer reliably hoisted to the top-level `node_modules` and was breaking `src/ExpoDeviceAdminModule.ts`'s import.
 - Explicitly type the `LOCK_TASK_FEATURE_*` constants on the native module class, since `NativeModule`'s TS base type dropped its `[key: string]: any` index signature in this `expo-modules-core` version.
