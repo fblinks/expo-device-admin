@@ -10,6 +10,18 @@
 
 ### 💡 Others
 
+## 0.5.1 (2026-08-21)
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
+### 🐛 Bug fixes
+
+- Fix `enableImmersiveMode()` on Android 11+ (API 30+) leaving the system bars visible indefinitely once revealed by a swipe gesture (long enough to tap Back and exit); `systemBarsBehavior` was set to `BEHAVIOR_DEFAULT` instead of `BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE`, which auto-hides the bars again after the swipe. Note this narrows the reveal window rather than eliminating it — Android intentionally keeps a system-bar reveal gesture reachable as an accessibility/escape valve, regardless of behavior setting.
+
+### 💡 Others
+
 ## 0.5.0 (2026-08-21)
 
 ### 🛠 Breaking changes

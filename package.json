@@ -1,6 +1,6 @@
 {
   "name": "expo-device-admin",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A module implementing DeviceAdminReceiver",
   "main": "build/index.js",
   "types": "build/index.d.ts",

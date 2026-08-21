@@ -60,12 +60,14 @@ See `example/App.tsx` for a runnable reference of every method below.
 | `setApplicationHidden(packageName: string, hidden: boolean): Promise<void>` | Hides (or unhides) an installed package fleet-wide — it becomes unavailable to launch or select anywhere, though its data is preserved and unhiding restores it. Requires device owner. See note below. |
 | `setLockTaskFeatures(features: number): Promise<void>` | Sets which system UI features (see constants below) are available while locked. Requires device owner. |
 | `rebootDevice(): Promise<void>` | Reboots the device immediately. Requires device owner. |
-| `enableImmersiveMode(): Promise<void>` | Hides the system status/navigation bars. |
+| `enableImmersiveMode(): Promise<void>` | Hides the system status/navigation bars. See note below. |
 | `disableImmersiveMode(): Promise<void>` | Restores the system status/navigation bars. |
 
 > **Note on `setAsPersistentHomeActivity`:** this only sets the *preference* for which activity handles Home — the app must still declare its own `HOME`/`DEFAULT` intent-filter in its manifest (e.g. via a config plugin) for the activity to be Home-capable in the first place. Call it from whichever activity should become Home. The underlying preference is designed to survive resets on its own, but re-calling it on every app-active resume alongside `addToLockTaskMode()` is still recommended — it's cheap and idempotent, and covers the case where the initial call never happened or failed (e.g. before device-owner provisioning completed).
 
 > **Note on `setApplicationHidden`:** unlike `setAsPersistentHomeActivity`, which only closes the specific "wrong app resolves Home" path, hiding a competing launcher package closes *every* path to it at once (its icon, Recents entries, and Home resolution alike) since the package becomes fully unavailable to launch. Pass the exact package name(s) of the competing launcher(s) present on your fleet's hardware (e.g. an OEM launcher or kids-mode launcher) — this module has no way to discover which other HOME-capable packages are installed on a given device, so it doesn't enumerate or hide anything on its own.
+
+> **Note on `enableImmersiveMode`:** on Android 11+ (API 30+) the system bars are set to reveal only transiently on a swipe gesture, auto-hiding again afterward — this *narrows* the reveal window, it doesn't eliminate it. Android intentionally keeps some system-bar reveal gesture reachable on non-rooted devices as an accessibility/escape valve, so full suppression isn't achievable through this API on any behavior setting.
 
 ### Constants
 

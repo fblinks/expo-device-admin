@@ -133,7 +133,7 @@ class ExpoDeviceAdminModule : Module() {
                     val controller = window.insetsController
                     controller?.let {
                         it.hide(WindowInsets.Type.systemBars()) // Hide status and navigation bars
-                        it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_DEFAULT
+                        it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                     }
                 } else { // Android 10 and below (API 29-)
                     decorView.systemUiVisibility =
