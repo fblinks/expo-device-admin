@@ -10,6 +10,18 @@
 
 ### 💡 Others
 
+## 0.4.0 (2026-08-21)
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
+- Add `setAsPersistentHomeActivity()`: forces the current activity as the sole Home target via `DevicePolicyManager.addPersistentPreferredActivity`, so pressing Home while locked no longer shows Android's launcher picker (picking a different installed launcher from that picker previously exited lock task mode entirely).
+
+### 🐛 Bug fixes
+
+### 💡 Others
+
 ## 0.3.0 (2026-08-20)
 
 ### 🛠 Breaking changes

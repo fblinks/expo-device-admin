@@ -5,6 +5,8 @@ import android.app.ActivityManager
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
@@ -28,6 +30,11 @@ class ExpoDeviceAdminModule : Module() {
 
     private val componentName: ComponentName
         get() = ComponentName(context, MinimalDeviceAdminReceiver::class.java) as ComponentName
+
+    private val homeIntentFilter: IntentFilter = IntentFilter(Intent.ACTION_MAIN).apply {
+        addCategory(Intent.CATEGORY_HOME)
+        addCategory(Intent.CATEGORY_DEFAULT)
+    }
 
     private val isLockTaskModeRunning: Boolean
         @SuppressLint("ObsoleteSdkInt")
@@ -76,6 +83,20 @@ class ExpoDeviceAdminModule : Module() {
             }
 
             dpm.setLockTaskPackages(componentName, arrayOf(context.packageName, "com.google.android.captiveportallogin"))
+        }
+
+        /** Forces the current activity as the sole Home target, bypassing the launcher picker */
+        AsyncFunction("setAsPersistentHomeActivity") {
+            if (!dpm.isDeviceOwnerApp(context.packageName)) {
+                throw IllegalStateException("App is not the device owner.")
+            }
+
+            val activity = appContext.currentActivity
+                ?: throw IllegalStateException(
+                        "No current activity; call setAsPersistentHomeActivity() while an activity is active."
+                )
+
+            dpm.addPersistentPreferredActivity(componentName, homeIntentFilter, activity.componentName)
         }
 
         /**

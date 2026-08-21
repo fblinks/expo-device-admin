@@ -36,6 +36,12 @@ export default function App() {
             }}
           />
           <Button
+            title="Set as persistent Home activity"
+            onPress={async () => {
+              await ExpoDeviceAdmin.setAsPersistentHomeActivity();
+            }}
+          />
+          <Button
             title="Set lock task features (home + overview)"
             onPress={async () => {
               await ExpoDeviceAdmin.setLockTaskFeatures(

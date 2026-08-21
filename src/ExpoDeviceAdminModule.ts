@@ -7,6 +7,7 @@ declare class ExpoDeviceAdminModule extends NativeModule {
   checkIfKioskEnabled(): boolean;
   rebootDevice(): Promise<void>;
   addToLockTaskMode(): Promise<void>;
+  setAsPersistentHomeActivity(): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
   enableImmersiveMode(): Promise<void>;
   disableImmersiveMode(): Promise<void>;
