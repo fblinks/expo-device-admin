@@ -2,6 +2,9 @@ import ExpoDeviceAdmin from 'expo-device-admin';
 import { useState } from 'react';
 import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
+// Replace with the actual competing launcher package(s) found on your fleet's hardware.
+const EXAMPLE_PACKAGE_TO_HIDE = 'com.example.otherlauncher';
+
 export default function App() {
   const [isDeviceOwner, setIsDeviceOwner] = useState<boolean | null>(null);
   const [isKioskEnabled, setIsKioskEnabled] = useState<boolean | null>(null);
@@ -39,6 +42,18 @@ export default function App() {
             title="Set as persistent Home activity"
             onPress={async () => {
               await ExpoDeviceAdmin.setAsPersistentHomeActivity();
+            }}
+          />
+          <Button
+            title="Hide competing launcher package"
+            onPress={async () => {
+              await ExpoDeviceAdmin.setApplicationHidden(EXAMPLE_PACKAGE_TO_HIDE, true);
+            }}
+          />
+          <Button
+            title="Show competing launcher package"
+            onPress={async () => {
+              await ExpoDeviceAdmin.setApplicationHidden(EXAMPLE_PACKAGE_TO_HIDE, false);
             }}
           />
           <Button

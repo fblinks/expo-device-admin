@@ -8,6 +8,7 @@ declare class ExpoDeviceAdminModule extends NativeModule {
   rebootDevice(): Promise<void>;
   addToLockTaskMode(): Promise<void>;
   setAsPersistentHomeActivity(): Promise<void>;
+  setApplicationHidden(packageName: string, hidden: boolean): Promise<void>;
   setLockTaskFeatures(features: number): Promise<void>;
   enableImmersiveMode(): Promise<void>;
   disableImmersiveMode(): Promise<void>;

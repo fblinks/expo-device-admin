@@ -99,6 +99,18 @@ class ExpoDeviceAdminModule : Module() {
             dpm.addPersistentPreferredActivity(componentName, homeIntentFilter, activity.componentName)
         }
 
+        /** Hides or shows an installed package fleet-wide (reversible; data is preserved) */
+        AsyncFunction("setApplicationHidden") { packageName: String, hidden: Boolean ->
+            if (!dpm.isDeviceOwnerApp(context.packageName)) {
+                throw IllegalStateException("App is not the device owner.")
+            }
+
+            val success = dpm.setApplicationHidden(componentName, packageName, hidden)
+            if (!success) {
+                throw IllegalStateException("Failed to set hidden=$hidden for package \"$packageName\".")
+            }
+        }
+
         /**
          * Sets enabled features duting kiosk mode (lock task)
          * https://developer.android.com/reference/android/app/admin/DevicePolicyManager#setLockTaskFeatures(android.content.ComponentName,%20int)

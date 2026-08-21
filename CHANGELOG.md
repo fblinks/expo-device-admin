@@ -10,6 +10,18 @@
 
 ### 💡 Others
 
+## 0.5.0 (2026-08-21)
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
+- Add `setApplicationHidden(packageName, hidden)`: hides or unhides an installed package fleet-wide via `DevicePolicyManager.setApplicationHidden`, closing every path to a competing HOME-capable launcher at once (icon, Recents, and Home resolution alike) rather than one specific path at a time.
+
+### 🐛 Bug fixes
+
+### 💡 Others
+
 ## 0.4.0 (2026-08-21)
 
 ### 🛠 Breaking changes
